@@ -8,14 +8,11 @@ import re
 import xlwt
 import xlrd
 import smtplib
-import pandas 
-import json
 import email.MIMEMultipart
 import email.MIMEText
 import email.MIMEBase
 import mimetypes
 import email.MIMEImage
-from email.mime.text import MIMEText
 reload(sys)
 sys.setdefaultencoding('utf-8')
 def podcheck ():
@@ -43,7 +40,7 @@ def podcheck ():
 		podfile.close()
 		logfile.write(bad+'\n')
 		podnamelen = len(podname) - 1
-		time.sleep(5)
+		time.sleep(60)
 		#os.system("kubectl get pods --all-namespaces -o wide|grep -v 'STATUS' > podstatus.txt")
 		podfiles = open("podstatus.txt","r")
 		time_nows = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S 第%W周 %A/%w')
@@ -138,44 +135,8 @@ def podcheck ():
 				d = len(c)
 		sheet.col(0).width = d * 256
 
-		xls.save('pod.xlsx')
-#####################################
-def excel_to_html():
-	xd = pd.ExcelFile('pod.xlsx')
-	df = xd.parse()
-	with codecs.open('pod.html', 'w', 'utf-8') as html_file:
-		html_file.write(df.to_html(header=True, index=False))
-	file = open('pod.html').read()
-	return file
-####################################
-def sendmail(file_name):
-	From = "15150595954@163.com"
-	To = "wangluxin@corp-ci.com"
-	server = smtplib.SMTP("smtp.163.com")
-	server.login("15150595954@163.com","xinlu120394")
-	main_msg = email.MIMEMultipart.MIMEMultipart()
-	text_msg = email.MIMEText.MIMEText("kubernetes监控信息",_charset="utf-8")
-	main_msg.attach(text_msg)
-	ctype,encoding = mimetypes.guess_type(file_name)
-	if ctype is None or encoding is not None:
-		ctype='application/octet-stream'
-	maintype,subtype = ctype.split('/',1)
-	file_msg=email.MIMEImage.MIMEImage(open(file_name,'rb').read(),subtype)
-	basename = os.path.basename(file_name)
-	file_msg.add_header('Content-Disposition','attachment', filename = basename)
-	main_msg.attach(MIMEText(html,'html','utf-8'))
-#	main_msg.attach(file_msg)
-	
-	main_msg['From'] = From
-	main_msg['To'] = To
-	main_msg['Subject'] = "kubernetes pod error"
-	main_msg['Date'] = email.Utils.formatdate( )
-	fullText = main_msg.as_string( )
-	try:
-		server.sendmail(From, To, fullText)
-	finally:
-		server.quit()
+		xls.save('pod.xls')
+		#print len(podip[0])
+		
 ################################
 podcheck ()
-excel_to_html()
-sendmail("pod.xlsx")

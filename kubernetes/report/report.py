@@ -15,16 +15,16 @@ import os.path
 import mimetypes
 import email.MIMEImage
 def txt2xls(xlsname):
-    f = open(filename)
+    f = os.system("kubectl get namespaces")
     x = 0
     y = 0
-    s = open(filenamesvc)
+    s = os.system("kubectl get svc -o wide --all-namespaces")
     a = 0
     b = 0
-    p = open(filenamepod)
+    p = os.system("kubectl get pods -o wide --all-namespaces")
     c = 0
     d = 0
-    q = open(filenameimages)
+    q = os.system("docker images -a")
     m = 0
     n = 0
     xls=xlwt.Workbook()
@@ -40,7 +40,6 @@ def txt2xls(xlsname):
         for i in linepod.split():
             item=i.strip().decode('utf8')
             sheet3.write(c,d,item)
-
             d += 1
         c += 1
         d = 0
@@ -77,9 +76,6 @@ def txt2xls(xlsname):
             n += 1
         m += 1
         n = 0
-    f.close()
-    s.close()
-    p.close()
     xls.save(xlsname+'.xls')
 def sendmail(file_name):
         From = "发件人"
@@ -113,9 +109,6 @@ def sendmail(file_name):
 
 
 if __name__ == "__main__":
-	filename = '/opt/ci123/baobiao/namespaces.txt'
-	filenamesvc = '/opt/ci123/baobiao/service.txt'
-	filenamepod = '/opt/ci123/baobiao/pods.txt'
-	filenameimages = '/opt/ci123/baobiao/images.txt'
+	xlsname='report'
     txt2xls(xlsname)
-	sendmail(file_name)
+	sendmail(xlsname + 'xls')

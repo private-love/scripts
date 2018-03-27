@@ -8,11 +8,12 @@ import re
 import xlwt
 import xlrd
 import smtplib
-import pandas 
-import json
+import pandas as pd
+import codecs
 import email.MIMEMultipart
 import email.MIMEText
 import email.MIMEBase
+from email.mime.base import MIMEBase 
 import mimetypes
 import email.MIMEImage
 from email.mime.text import MIMEText
@@ -20,6 +21,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 def podcheck ():
 	time_now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S 第%W周 %A/%w')
+	filetime = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
 	#os.system("kubectl get pods --all-namespaces -o wide|grep -v 'STATUS' > podstatus.txt")
 	logfile = open("pod.log","a+")	
 	podfile = open("podstatus.txt","r")
@@ -43,7 +45,7 @@ def podcheck ():
 		podfile.close()
 		logfile.write(bad+'\n')
 		podnamelen = len(podname) - 1
-		time.sleep(5)
+		time.sleep(30)
 		#os.system("kubectl get pods --all-namespaces -o wide|grep -v 'STATUS' > podstatus.txt")
 		podfiles = open("podstatus.txt","r")
 		time_nows = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S 第%W周 %A/%w')
@@ -77,8 +79,8 @@ def podcheck ():
 		logfile.write(ok+'\n')
 	podfile.close()
 	logfile.close()
+#########生成excel
 	if podnamebad or podnamenew or podnameok:
-		#print podnamebad
 		xls=xlwt.Workbook(encoding='utf-8')
 		sheet = xls.add_sheet('podstatus_check',cell_overwrite_ok=True)
 		x = 1;y = 0
@@ -138,23 +140,97 @@ def podcheck ():
 				d = len(c)
 		sheet.col(0).width = d * 256
 
-		xls.save('pod.xlsx')
+		xls.save('pod.xls')
+#########生成HTML
+	if podnamebad or podnamenew or podnameok:
+		html = ""
+		html += "<table border=\"1\" cellspacing=\"0\">"
+		html += "<tr align=\"center\">"
+		if podnameok:
+			html += "<td  colspan=\"5\">在检查期间恢复的Running的pod信息</td>"
+			html += "</tr>"
+			html += "<tr>"
+			for i in range (0,len(status1)):
+				html += "<td>"+ status1[i] + "</td>"
+			html += "</tr>"
+			html += "<tr>"
+			for i in range (0,len(podnameok)):
+		 		html += "<td>" + podnamespacesok[i] + "</td>"
+		 		html += "<td>" + podnameok[i] + "</td>"
+				html += "<td>" + podstatusok[i] + "</td>"
+				html += "<td>" + podipok[i] + "</td>"
+		 		html += "<td>" + podnodeok[i] + "</td>"
+				html += "</tr>"
+				html += "<tr>"
+			html += "</tr>"
+		else:
+			html += "<td  colspan=\"5\">在检查期间没有pod恢复Running </td>"
+			html += "</tr>"
+		html += "<tr align=\"center\">"
+		if podnamebad:
+			html += "<td  colspan=\"5\">仍然error的pod信息</td>"
+			html += "</tr>"
+			html += "<tr>"
+			for i in range (0,len(status1)):
+				html += "<td>"+ status1[i] + "</td>"
+			html += "</tr>"
+			html += "<tr>"
+			for i in range (0,len(podnamebad)):
+				html += "<td>" + podnamespacesbad[i] + "</td>"
+				html += "<td>" + podnamebad[i] + "</td>"
+				html += "<td>" + podstatusbad[i] + "</td>"
+		 		html += "<td>" + podipbad[i] + "</td>"
+				html += "<td>" + podnodebad[i] + "</td>"
+				html += "</tr>"
+				html += "<tr>"
+			html += "</tr>"     
+		else:
+			html += "<td  colspan=\"5\">之前error的pod已经恢复Running </td>"
+			html += "</tr>"
+		html += "<tr align=\"center\">"
+		if podnamenew:
+			html += "<td  colspan=\"5\">检查期间出现新的error pod</td>"
+			html += "</tr>"
+			html += "<tr>"
+			for i in range (0,len(status1)):
+				html += "<td>"+ status1[i] + "</td>"
+			html += "</tr>"
+			html += "<tr>"
+			for i in range (0,len(podnamenew)):
+				html += "<td>" + podnamespacesnew[i] + "</td>"
+				html += "<td>" + podnamenew[i] + "</td>"
+				html += "<td>" + podstatusnew[i] + "</td>"
+				html += "<td>" + podipnew[i] + "</td>"
+				html += "<td>" + podnodenew[i] + "</td>"
+				html += "</tr>"
+				html += "<tr>"
+			html += "</tr>"
+		else:
+			html += "<td  colspan=\"5\">检查期间没有出现新的error pod </td>"
+			html += "</tr>"
+		html += "</table>"
+		htmlname = filetime + '.html'
+		htmlfile = open('./html/' + htmlname,'w')
+		htmlfile.write(html)
+		htmlfile.close()
+		sendmail("pod.xls",filetime)
 #####################################
 def excel_to_html():
-	xd = pd.ExcelFile('pod.xlsx')
+	xd = pd.ExcelFile('pod.xls')
 	df = xd.parse()
 	with codecs.open('pod.html', 'w', 'utf-8') as html_file:
 		html_file.write(df.to_html(header=True, index=False))
 	file = open('pod.html').read()
 	return file
 ####################################
-def sendmail(file_name):
-	From = "15150595954@163.com"
+def sendmail(file_name,subtime):
+	html = open('./html/' + subtime + '.html').read()
+	From = "grafana@ciurl.cn"
 	To = "wangluxin@corp-ci.com"
-	server = smtplib.SMTP("smtp.163.com")
-	server.login("15150595954@163.com","xinlu120394")
+	server = smtplib.SMTP("exmail.ciurl.cn")
+	server.login("grafana@ciurl.cn","asbg123a2")
 	main_msg = email.MIMEMultipart.MIMEMultipart()
-	text_msg = email.MIMEText.MIMEText("kubernetes监控信息",_charset="utf-8")
+	text_msg = email.MIMEText.MIMEText(html,_subtype='html',_charset="utf-8")
 	main_msg.attach(text_msg)
 	ctype,encoding = mimetypes.guess_type(file_name)
 	if ctype is None or encoding is not None:
@@ -163,12 +239,11 @@ def sendmail(file_name):
 	file_msg=email.MIMEImage.MIMEImage(open(file_name,'rb').read(),subtype)
 	basename = os.path.basename(file_name)
 	file_msg.add_header('Content-Disposition','attachment', filename = basename)
-	main_msg.attach(MIMEText(html,'html','utf-8'))
-#	main_msg.attach(file_msg)
+	main_msg.attach(file_msg)
 	
 	main_msg['From'] = From
 	main_msg['To'] = To
-	main_msg['Subject'] = "kubernetes pod error"
+	main_msg['Subject'] = subtime + "  kubernetes pod error"
 	main_msg['Date'] = email.Utils.formatdate( )
 	fullText = main_msg.as_string( )
 	try:
@@ -176,6 +251,17 @@ def sendmail(file_name):
 	finally:
 		server.quit()
 ################################
-podcheck ()
-excel_to_html()
-sendmail("pod.xlsx")
+def listDir(fileDir):
+	for eachFile in os.listdir(fileDir):
+		if os.path.isfile(fileDir+"/"+eachFile):
+			ft = os.stat(fileDir+"/"+eachFile)
+			ltime = int(ft.st_mtime)
+			ntime = int(time.time())-60*60*24*3
+			if ltime<=ntime:
+				os.remove(fileDir+"/"+eachFile)
+		elif os.path.isdir(fileDir+"/"+eachFile):
+			listDir(fileDir+"/"+eachFile)
+if __name__ == '__main__':
+	podcheck ()
+	path = "./html"
+	listDir(path)

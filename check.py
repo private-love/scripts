@@ -96,7 +96,7 @@ def podcheck ():
 			sheet.write(x,0,status1[0],style2);sheet.write(x,1,status1[1],style2);sheet.write(x,2,status1[2],style2);sheet.write(x,3,status1[3],style2);sheet.write(x,4,status1[4],style2)
 			x += 1
 			for i in range (0,len(podnameok)):
-				sheet.write(x,0,podnamespacesok[i],style);sheet.write(x,1,podnameok[i],style);sheet.write(x,2,podstatusok[i],style2);sheet.write(x,3,podipok[i],style2);sheet.write(x,4,podnodeok[i],style2)
+				sheet.write(x,0,podnamespacesok[i],style);sheet.write(x,1,podnameok[i],style);sheet.write(x,2,'Running',style2);sheet.write(x,3,podipok[i],style2);sheet.write(x,4,podnodeok[i],style2)
 				x += 1
 		else:
 			sheet.write_merge(0,0,0,4,'在检查期间没有pod恢复Running',style1)
@@ -157,7 +157,7 @@ def podcheck ():
 			for i in range (0,len(podnameok)):
 		 		html += "<td>" + podnamespacesok[i] + "</td>"
 		 		html += "<td>" + podnameok[i] + "</td>"
-				html += "<td>" + podstatusok[i] + "</td>"
+				html += "<td>" + 'Running' + "</td>"
 				html += "<td>" + podipok[i] + "</td>"
 		 		html += "<td>" + podnodeok[i] + "</td>"
 				html += "</tr>"

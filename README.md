@@ -1,2 +1,4 @@
 # python
-监控kubernetes pod状态找出5分钟内非Runing的pod，生产html和excel发送email
+```
+监控kubernetes pod状态找出5分钟内非Runing的pod，生成html和excel发送email
+```

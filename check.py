@@ -22,7 +22,7 @@ sys.setdefaultencoding('utf-8')
 def podcheck ():
 	time_now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S 第%W周 %A/%w')
 	filetime = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
-	#os.system("kubectl get pods --all-namespaces -o wide|grep -v 'STATUS' > podstatus.txt")
+	os.system("kubectl get pods --all-namespaces -o wide|grep -v 'STATUS' > podstatus.txt")
 	logfile = open("pod.log","a+")	
 	podfile = open("podstatus.txt","r")
 	podname = [];podnames = [];podnameok = [];podnamebad = [];podnamenew = []
@@ -46,7 +46,7 @@ def podcheck ():
 		logfile.write(bad+'\n')
 		podnamelen = len(podname) - 1
 		time.sleep(30)
-		#os.system("kubectl get pods --all-namespaces -o wide|grep -v 'STATUS' > podstatus.txt")
+		os.system("kubectl get pods --all-namespaces -o wide|grep -v 'STATUS' > podstatus.txt")
 		podfiles = open("podstatus.txt","r")
 		time_nows = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S 第%W周 %A/%w')
 		oks = time_nows + '      error pod have recovered Running'

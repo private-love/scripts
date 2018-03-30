@@ -1,7 +1,5 @@
 #!/bin/env python
 #coding:utf-8
-#author: chen-123
-#date:2015-05-25
 
 import os, time, sys
 import xdrlib

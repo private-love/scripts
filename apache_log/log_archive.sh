@@ -1,8 +1,5 @@
 #!/bin/sh
 #将当前目录下常规apache日志文件，安装月份归集
-#link： blog.phpdba.com
-#date：2014-07-29
-#author: chen-123
 
 export LANG="en_US.UTF-8"
 project_list=`ls -l|grep 'access\.20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]$'|awk '{print $NF}'|awk -F'[-_]access.' '{print $1}'|uniq`

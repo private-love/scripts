@@ -1,9 +1,5 @@
 #!/usr/bin python
 #coding:utf-8
-#what check backup
-#who  by feijilei
-#when 2013-09-05
-#modify by wuwangli @2014-06-11
 
 import paramiko
 import re

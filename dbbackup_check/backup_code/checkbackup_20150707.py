@@ -1,8 +1,5 @@
 #!/usr/bin python
 #coding:utf-8
-#what check backup version 2.1
-#when 2015-06-08 
-#author: v1.0 feijilei v2.0 wuwanli v2.1 chen-123
 
 import paramiko
 import re

@@ -143,7 +143,7 @@ def podcheck ():
 #########生成HTML
 	if podnamebad or podnamenew or podnameok:
 		html = ""
-		html += "<table border=\"1\" cellspacing=\"0\">"
+		html += "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><table border=\"1\" cellspacing=\"0\">"
 		html += "<tr align=\"center\">"
 		if podnameok:
 			html += "<td  colspan=\"5\">在检查期间恢复的Running的pod信息</td>"
@@ -177,7 +177,7 @@ def podcheck ():
 			for i in range (0,len(podnamebad)):
 				html += "<td>" + podnamespacesbad[i] + "</td>"
 				html += "<td>" + podnamebad[i] + "</td>"
-				html += "<td><font color='red'>"+podstatusbad[i] + "</font></td>"
+				html += "<td><font color=\"red\">"+podstatusbad[i] + "</font></td>"
 		 		html += "<td>" + podipbad[i] + "</td>"
 				html += "<td>" + podnodebad[i] + "</td>"
 				html += "</tr>"
@@ -198,7 +198,7 @@ def podcheck ():
 			for i in range (0,len(podnamenew)):
 				html += "<td>" + podnamespacesnew[i] + "</td>"
 				html += "<td>" + podnamenew[i] + "</td>"
-				html += "<td><font color='red'>" + podstatusnew[i] + "</font></td></td>"
+				html += "<td><font color=\"red\">" + podstatusnew[i] + "</font></td></td>"
 				html += "<td>" + podipnew[i] + "</td>"
 				html += "<td>" + podnodenew[i] + "</td>"
 				html += "</tr>"

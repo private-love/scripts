@@ -30,7 +30,8 @@ def logback(logdir):
 						size=os.path.getsize(all)
 						if size/1024/1024 > 200 and int(daynow)-7 > int(datenum[-2:]):
 							zip='./backup/'+logtype+'access.'+datenum[:-2]
-							print(all+' gzip add to '+zip+'.gz')
+#							print(all+' gzip add to '+zip+'.gz')
+							print("%-45s%-20s%s"%(all,' gzip add to ',zip+'.gz'))
 							ziplog(zip,all)
 							os.remove(all)
 					else:

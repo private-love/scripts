@@ -8,20 +8,19 @@ import re
 import xlwt
 import xlrd
 import smtplib
-import pandas as pd
 import codecs
 import email.MIMEMultipart
 import email.MIMEText
 import email.MIMEBase
-from email.mime.base import MIMEBase 
+#from email.mime.base import MIMEBase 
 import mimetypes
 import email.MIMEImage
-from email.mime.text import MIMEText
+#from email.mime.text import MIMEText
 reload(sys)
 sys.setdefaultencoding('utf-8')
 def podcheck ():
 	time_now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S 第%W周 %A/%w')
-	filetime = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
+	filetime = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
 	#os.system("kubectl get pods --all-namespaces -o wide|grep -v 'STATUS' > podstatus.txt")
 	logfile = open("pod.log","a+")	
 	podfile = open("podstatus.txt","r")
@@ -140,7 +139,7 @@ def podcheck ():
 				d = len(c)
 		sheet.col(0).width = d * 256
 
-		xls.save('pod.xls')
+		xls.save("./xls/"+filetime+".xls")
 #########生成HTML
 	if podnamebad or podnamenew or podnameok:
 		html = ""
@@ -213,7 +212,7 @@ def podcheck ():
 		htmlfile = open('./html/' + htmlname,'w')
 		htmlfile.write(html)
 		htmlfile.close()
-		sendmail("pod.xls",filetime)
+		sendmail("./xls/"+filetime+".xls",filetime)
 #####################################
 def excel_to_html():
 	xd = pd.ExcelFile('pod.xls')

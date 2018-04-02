@@ -22,7 +22,7 @@ sys.setdefaultencoding('utf-8')
 def podcheck ():
 	time_now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S 第%W周 %A/%w')
 	filetime = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
-	os.system("kubectl get pods --all-namespaces -o wide|grep -v 'STATUS' > podstatus.txt")
+	#os.system("kubectl get pods --all-namespaces -o wide|grep -v 'STATUS' > podstatus.txt")
 	logfile = open("pod.log","a+")	
 	podfile = open("podstatus.txt","r")
 	podname = [];podnames = [];podnameok = [];podnamebad = [];podnamenew = []
@@ -46,7 +46,7 @@ def podcheck ():
 		logfile.write(bad+'\n')
 		podnamelen = len(podname) - 1
 		time.sleep(30)
-		os.system("kubectl get pods --all-namespaces -o wide|grep -v 'STATUS' > podstatus.txt")
+		#os.system("kubectl get pods --all-namespaces -o wide|grep -v 'STATUS' > podstatus.txt")
 		podfiles = open("podstatus.txt","r")
 		time_nows = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S 第%W周 %A/%w')
 		oks = time_nows + '      error pod have recovered Running'
@@ -157,7 +157,7 @@ def podcheck ():
 			for i in range (0,len(podnameok)):
 		 		html += "<td>" + podnamespacesok[i] + "</td>"
 		 		html += "<td>" + podnameok[i] + "</td>"
-				html += "<td>" + 'Running' + "</td>"
+				html += "<td>Running</td>"
 				html += "<td>" + podipok[i] + "</td>"
 		 		html += "<td>" + podnodeok[i] + "</td>"
 				html += "</tr>"
@@ -178,7 +178,7 @@ def podcheck ():
 			for i in range (0,len(podnamebad)):
 				html += "<td>" + podnamespacesbad[i] + "</td>"
 				html += "<td>" + podnamebad[i] + "</td>"
-				html += "<td>" + podstatusbad[i] + "</td>"
+				html += "<td><font color='red'>"+podstatusbad[i] + "</font></td>"
 		 		html += "<td>" + podipbad[i] + "</td>"
 				html += "<td>" + podnodebad[i] + "</td>"
 				html += "</tr>"
@@ -199,7 +199,7 @@ def podcheck ():
 			for i in range (0,len(podnamenew)):
 				html += "<td>" + podnamespacesnew[i] + "</td>"
 				html += "<td>" + podnamenew[i] + "</td>"
-				html += "<td>" + podstatusnew[i] + "</td>"
+				html += "<td><font color='red'>" + podstatusnew[i] + "</font></td></td>"
 				html += "<td>" + podipnew[i] + "</td>"
 				html += "<td>" + podnodenew[i] + "</td>"
 				html += "</tr>"

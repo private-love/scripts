@@ -177,7 +177,8 @@ def podcheck ():
 			for i in range (0,len(podnamebad)):
 				html += "<td>" + podnamespacesbad[i] + "</td>"
 				html += "<td>" + podnamebad[i] + "</td>"
-				html += "<td><font color=\"red\">"+podstatusbad[i] + "</font></td>"
+				html += "<td><font color=\"red\"><b>"+podstatusbad[i] + "</b></font></td>"
+#				html += "<td bgcolor=\"\#FF0000\">"+podstatusbad[i] + "</td>"
 		 		html += "<td>" + podipbad[i] + "</td>"
 				html += "<td>" + podnodebad[i] + "</td>"
 				html += "</tr>"
@@ -198,7 +199,7 @@ def podcheck ():
 			for i in range (0,len(podnamenew)):
 				html += "<td>" + podnamespacesnew[i] + "</td>"
 				html += "<td>" + podnamenew[i] + "</td>"
-				html += "<td><font color=\"red\">" + podstatusnew[i] + "</font></td></td>"
+				html += "<td><font color=\"red\"><b>" + podstatusnew[i] + "</b></font></td></td>"
 				html += "<td>" + podipnew[i] + "</td>"
 				html += "<td>" + podnodenew[i] + "</td>"
 				html += "</tr>"

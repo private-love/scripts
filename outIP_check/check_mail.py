@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-import requests,datetime,re
+import requests,datetime,re,paramiko
 from bs4 import BeautifulSoup
 import smtplib,email.MIMEText,email.MIMEMultipart
 def get_out_ip(url):
@@ -53,8 +53,30 @@ def check(ipnew):
                iplist.write(checktime+"  increase  "+i+'\n')
     if IPmail:
         sendmail(IPmail)
+def ssh_all(ips):
+    ipalllist=[]
+    for ip in ips:
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname=ip)
+        stdin, stdout, stderr = ssh.exec_command('[ -f /root/wlx/check.py ];echo $?')
+        result = stdout.read()
+        if result == '1':
+            transport = paramiko.Transport((ip,"22"))
+            sftp = paramiko.SFTPClient.from_transport(transport)
+            sftp.put('/root/wlx/check.py', '/root/wlx/check.py')
+            transport.close()
+        else:
+            stdin, stdout, stderr = ssh.exec_command('python /root/wlx/check.py')
+            ipalllist.append(stdout.read())
+        ssh.close()
+        return ipalllist
+
+
 if __name__ == '__main__':
     checktime=datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
-    ip=get_out_ip(get_real_url())
-    iplist=[];iplist.append(ip)
-    check(iplist)
+    ipother=['192.168.0.65']
+    print(ssh_all(ipother))
+#    ip=get_out_ip(get_real_url())
+#    iplist=[];iplist.append(ip)
+#    check(iplist)

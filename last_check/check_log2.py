@@ -251,8 +251,8 @@ def getLastInfo(type):
         host = hostport[0]
         port = int(hostport[1])
         print host+ ':'+ str(port)
-	if host == "118.26.229.9":
-	    key = "/opt/scripts/services_check/check_last/9.ini"
+	if host == "xxx":
+	    key = "xxx"
 	else:
         # 检查主机信息
             key = "/root/.ssh/id_rsa"
@@ -310,8 +310,8 @@ def sendMail(subject, content, to_list, *attachmentFiles):
 
 if __name__ == '__main__':
     mail_host="smtp.163.com"
-    mail_user="ci123webserver@163.com"
-    mail_pass="ci123webserver12"
+    mail_user="xxx"
+    mail_pass="xxx"
 
     timelist = ['00','01','02','03','04','05','06','07','08','09','10','11','12',
                 '13','14','15','16','17','18','19','20','21','22','23']

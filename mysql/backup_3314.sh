@@ -50,11 +50,11 @@ else
 #      else
         echo "start backup" >> $LogFile
         cd /opt/ci123/data/yuanliang_3314
-        /opt/ci123/mysql-5.6.25/bin/mysql -S /tmp/mysql3314.sock -p'hanfuboyuan0619' -e "stop slave;flush tables"
+        mysql -S /tmp/mysql3314.sock -p'xxx' -e "stop slave;flush tables"
         #tar zcf /opt/ci123/backup/cishop/$NewFile var
 #	/opt/ci123/mysql-5.6.25/bin/mysqldump -S /tmp/mysql3314.sock -p'hanfuboyuan0619' --all-databases --master-data=2|gzip>/opt/ci123/backup/cishop/$NewFile
 	/opt/ci123/mysql/bin/mysql -S /tmp/mysql3314.sock -phanfuboyuan0619 -e'show databases'|grep -Ev 'mysql|information_schema|performance_schema|Database'|xargs /opt/ci123/mysql/bin/mysqldump -S /tmp/mysql3314.sock -phanfuboyuan0619 --databases --master-data=2|gzip>/opt/ci123/backup/3314/$NewFile
-        /opt/ci123/mysql-5.6.25/bin/mysql -S /tmp/mysql3314.sock -p'hanfuboyuan0619' -e "start slave"
+        /opt/ci123/mysql-5.6.25/bin/mysql -S /tmp/mysql3314.sock -p'xxx' -e "start slave"
         cd /opt/ci123/backup/3314
 #      fi
       echo "[$NewFile]Backup Success!" >> $LogFile

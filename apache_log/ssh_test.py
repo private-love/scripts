@@ -51,10 +51,10 @@ def ssh_info(host,port,user,keyfile,command):
 
 
 if __name__ == '__main__':
-	host = '180.96.7.115'
+	host = 'xxx'
 	port = '29622'
 	user = 'root'
 	keyfile = '/root/.ssh/id_rsa'
-	command = 'ssh 192.168.1.66 -p 29622 ' + "'cd /opt/ci123/backup/nbg;ls -gGHrtl --full-time dbnbg170206.sql.gz'"
+	command = 'ssh 192.168.1.66 -p 29622 ' + "'cd /xxx/nbg;ls -gGHrtl --full-time dbnbg170206.sql.gz'"
 	info = ssh_info(host,port,user,keyfile,command)
 	print info

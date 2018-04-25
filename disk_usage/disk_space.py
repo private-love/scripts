@@ -282,12 +282,12 @@ if __name__ == '__main__':
 	#此处设置需要查询信息的组名
 	groupname = ["Storage Servers"]
 	#groupname = ["Linux servers"]
-	zurl = "http://monitor.ciurl.cn"
-	zuser = "Admin"
-	zpasswd = "fuyuanzabbix"
+	zurl = "xxx"
+	zuser = "xxx"
+	zpasswd = "xxx"
 	serverinfo = {'mail_host':'smtp.163.com',
-		        'mail_user':'ci123webserver@163.com',
-				'mail_pass':'ci123webserver12'}
-	sendto = ['cjy@corp-ci.com']
+		        'mail_user':'xxx',
+				'mail_pass':'xxx'}
+	sendto = ['xxx']
 
 	sys.exit(int(main(sys.argv)))

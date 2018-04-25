@@ -366,13 +366,13 @@ def main(argv):
     return 0
 
 if __name__=='__main__':
-    host = "localhost"
-    user = "monitor"
-    passwd = "www.ci123.com"
-    dbname = "monitordb"
+    host = "xxx"
+    user = "xxx"
+    passwd = "xxx"
+    dbname = "xxx"
     unix_socket = "/tmp/mysql.sock"
     serverinfo = {'mail_host':'smtp.163.com',
-    		'mail_user':'ci123webserver@163.com',
-    		'mail_pass':'ci123webserver12'}
-    sendto = ['cjy@corp-ci.com']
+    		'mail_user':'xxx',
+    		'mail_pass':'xxx'}
+    sendto = ['xxx']
     sys.exit(int(main(sys.argv)))

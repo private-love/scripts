@@ -39,19 +39,7 @@ def check_memcache_info(Y,y,m,d):
 	err_result = {}
 	total_size = 0
 	
-	#dbconfig = func.get_db_config()
-	#db = MySQL.MySQL(dbconfig)
-
-	#if func.idc_type != 'all':
-	#	check_list_sql = "select check_backup.id,check_backup.host_id,check_backup.db,check_backup.path,check_backup.filename,check_backup.send_mail,host.host,host.port,host.alias_host,host.user,host.passwd,host.key_path,check_backup.check_day,host.alias_host from check_backup left join host on check_backup.host_id=host.id where check_backup.is_checking=0 and check_backup.is_delete=0 and host.idc_type='"+str(func.idc_type)+"'"
-	#else :
-	#	check_list_sql = "select check_backup.id,check_backup.host_id,check_backup.db,check_backup.path,check_backup.filename,check_backup.send_mail,host.host,host.port,host.alias_host,host.user,host.passwd,host.key_path,check_backup.check_day,host.alias_host from check_backup left join host on check_backup.host_id=host.id where check_backup.is_checking=0 and check_backup.is_delete=0"
-
-	#db.query(check_list_sql)
-	#check_list = db.fetchAllRows()
-   	#check_list = ['192.168.0.103:29622','192.168.0.113:29622','192.168.0.244:29622','192.168.0.253:22','192.168.0.240:29622','180.96.68.251:29622','180.96.68.252:29622','180.96.7.115:29622','180.96.7.114:29629','180.96.7.116:29629','118.26.229.9:22','192.168.0.104:29622']
-	check_list = ['192.168.0.244:29622','192.168.0.103:29622','192.168.0.104:29622','192.168.0.106:29622','192.168.0.107:29622','192.168.0.108:29622','192.168.0.248:22','192.168.0.242:22','180.96.68.252:29622','120.131.66.41:29622','180.96.7.114:29629','180.96.68.245:29622','180.96.68.252:29622','180.96.7.124:29622','180.96.7.116:29622']
-
+    check_list = [xxx]
     	for item in check_list:
 		hostport = item.split(":")
 		host = hostport[0]

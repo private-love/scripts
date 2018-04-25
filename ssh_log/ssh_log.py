@@ -160,8 +160,8 @@ def get_ssh_info():
         port = int(hostport[1])
         print host+ ':'+ str(port)
         # 检查主机信息
-        if host == "118.26.229.9":
-	    key = "/root/last_log/9.ini"
+        if host == "xxx":
+	    key = "xxx"
 	else:
         # 检查主机信息
             key = "/root/.ssh/id_rsa"
@@ -187,9 +187,9 @@ def main():
 
 if __name__ == '__main__':
     serverinfo = {'mail_host':'smtp.163.com',
-    		'mail_user':'ci123webserver@163.com',
-    		'mail_pass':'ci123webserver12'}
-    sendto = ['wangjing90@corp-ci.com']
+    		'mail_user':'xxx',
+    		'mail_pass':'xxx'}
+    sendto = ['xxx']
 
     whiteiplist = []
     with open('whiteIPlist.txt','rt') as f:

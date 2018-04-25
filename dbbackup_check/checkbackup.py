@@ -27,13 +27,6 @@ class NewClient(paramiko.SSHClient):
         return stdin, stdout, stderr, status
         
 def check_backup(Y,y,m,d):
-	"""
-	每日检查数据库备份计划 主体函数
-	Y:完整年份 如：2015
-	y:年份缩写 如：15
-	m：月份
-	d：天
-	"""
 	result = []
 	err_result = {}
 	is_alias_host_eq = False

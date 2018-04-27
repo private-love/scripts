@@ -18,9 +18,10 @@ def logback(logdir):
 		elif os.path.isdir('.'+'/'+all) and all == 'backup':
 			continue
 		else:
-			if all.endswith(('tar.gz','gz')):
-				print(all+' move to ./backup/')
-				shutil.move(all,'./backup')
+			if all.endswith(('tar.gz','gz','access.log')):
+				if not all.endswith(('access.log')):
+					print(all+' move to ./backup/')
+					shutil.move(all,'./backup')
 			else:
 				if 'access' in all:
 					date=re.match( r'(.*)access(.*)', all, re.M|re.I)			
@@ -47,4 +48,4 @@ if __name__ == '__main__':
 	mouthnow=datetime.datetime.now().strftime('%m')
 	yearnow=datetime.datetime.now().strftime('%Y')
 	daynow=datetime.datetime.now().strftime('%d')
-	logback('./logs')
+	logback('/opt/ci123/apache/logs')

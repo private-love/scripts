@@ -1,10 +1,15 @@
 #!/bin/sh
 #set password for root@localhost = password('xxx')
 #delete from user where Password='';
-port="3338"
-dir="nbg_test2_3338"
-server="663338"
-#mysqlversion="mysql-5.6.20"
+i=3675
+while true
+do
+  netstat -nltp|grep $i
+  [ $? != 0 ] && break || i=`expr $i + 1`
+done
+port=$i
+dir="wlx_$port"
+server=$port$port
 mysqlversion=`ls /opt/ci123|grep 'mysql-'|tail -1`
 function_my_cnf()
 {
@@ -18,7 +23,6 @@ character-set-server = utf8
 user    = mysql
 port    = $port
 socket  = /tmp/mysql$port.sock
-#basedir = /opt/ci123/mysql-5.6.20
 datadir = /opt/ci123/data/$dir/var
 log-error = /opt/ci123/data/$dir/log/mysql_error.log
 pid-file = /opt/ci123/data/$dir/log/mysql.pid
@@ -31,25 +35,23 @@ max_allowed_packet = 1024M
 sort_buffer_size = 8M
 join_buffer_size = 1M
 thread_cache_size = 300
-#thread_concurrency = 8
 query_cache_size = 512M
 query_cache_limit = 32M
 query_cache_min_res_unit = 2k
-#default-storage-engine = InnoDB
 thread_stack = 192K
 transaction_isolation = READ-COMMITTED
 tmp_table_size = 246M
 max_heap_table_size = 246M
 long_query_time = 3
 log-slave-updates
-log-bin = /opt/ci123/data/$dir/log/nbg-bin
+log-bin = /opt/ci123/data/$dir/log/bin-log
 binlog_cache_size = 64M
 binlog_format = MIXED
 max_binlog_cache_size = 128M
 max_binlog_size = 1G
-relay-log-index = /opt/ci123/data/$dir/log/nbg-relay-bin.index
-relay-log-info-file = /opt/ci123/data/$dir/log/nbg-relay-bin.info
-relay-log = /opt/ci123/data/$dir/log/nbg-relay-bin
+relay-log-index = /opt/ci123/data/$dir/log/relay-bin.index
+relay-log-info-file = /opt/ci123/data/$dir/log/relay-bin.info
+relay-log = /opt/ci123/data/$dir/log/relay-bin
 expire_logs_days = 0
 key_buffer_size = 256M
 read_buffer_size = 1M
@@ -62,13 +64,7 @@ myisam_recover
 
 interactive_timeout = 1200
 wait_timeout = 1200
-
 skip-name-resolve
-#master-connect-retry = 10
-#slave-skip-errors = 1032,1062,126,1114,1146,1048,1396
-#replicate-ignore-db=mysql
-
-
 server-id = $server
 
 innodb_additional_mem_pool_size = 16M
@@ -97,15 +93,15 @@ function_dir()
 {
 if [ ! -d "/opt/ci123/data/$dir/var/" ];
 then
-	mkdir -p /opt/ci123/data/$dir/var/
+    mkdir -p /opt/ci123/data/$dir/var/
 else
-	echo "/opt/ci123/data/$dir/var/" 已存在
+    echo "/opt/ci123/data/$dir/var/" 已存在
 fi
 if [ ! -d "/opt/ci123/data/$dir/log/slow" ];
 then
-	mkdir -p /opt/ci123/data/$dir/log/slow
+    mkdir -p /opt/ci123/data/$dir/log/slow
 else
-	echo "/opt/ci123/data/$dir/log/slow" 已存在
+    echo "/opt/ci123/data/$dir/log/slow" 已存在
 fi
 }
 
@@ -116,11 +112,39 @@ function_chowndir()
 
 function_dbuser()
 {
+if  [[ "$mysqlversion" =~ "5.6" ]]
+then
 cd /opt/ci123/$mysqlversion/
-./scripts/mysql_install_db --defaults-file=/opt/ci123/data/$dir/my.cnf --datadir=/opt/ci123/data/$dir/var/	
+./scripts/mysql_install_db --defaults-file=/opt/ci123/data/$dir/my.cnf --datadir=/opt/ci123/data/$dir/var/ --user=mysql
+else
+cd /opt/ci123/$mysqlversion/
+./bin/mysql_install_db --defaults-file=/opt/ci123/data/$dir/my.cnf --datadir=/opt/ci123/data/$dir/var/ --user=mysql
+fi
 }
 
 function_dir
 function_my_cnf
 function_chowndir
 function_dbuser
+/opt/ci123/$mysqlversion/bin/mysqld_safe --defaults-file=/opt/ci123/data/$dir/my.cnf --datadir=/opt/ci123/data/$dir/var/ --user=mysql &
+sleep 5
+ps aux|grep $mysqlversion|grep -v grep|grep $port
+if [[ $? == 1 ]]
+then 
+  echo 'mysql start error'
+else
+  if [[ $1 =~ "tar"]]
+  then
+    cd /opt/ci123/data/$dir/
+    tar zxvf $1
+  
+  else
+    gunzip $1
+    sqlfile=${1%???}
+    /opt/ci123/$mysqlversion/bin/mysql -S /tmp/mysql$port.sock -e'source $sqlfile;'
+    gzip -v $sqlfile
+    /opt/ci123/$mysqlversion/bin/mysqladmin -S /tmp/mysql$port.sock shutdown
+    /bin/rm -rf /opt/ci123/data/$dir/*
+  fi
+fi
+

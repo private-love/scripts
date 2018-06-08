@@ -4,8 +4,7 @@
 port="3338"
 dir="nbg_test2_3338"
 server="663338"
-#mysqlversion="mysql-5.6.20"
-mysqlversion=`ls /opt/ci123|grep 'mysql-'|tail -1`
+mysqlversion="mysql-5.6.20"
 function_my_cnf()
 {
 echo "[client]

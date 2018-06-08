@@ -205,5 +205,6 @@ if __name__ == '__main__':
     lhour = lasthour.strftime('%H')
     command = "LANG=en_US.UTF-8; export LANG; LC_ALL=en_US.UTF-8;export LC_ALL;cat /var/log/secure | " + "grep -E \"" + MON + "[ ]+" + DAY + "[ ]+" + lhour +  ":[0-5][0-9]:[0-5][0-9]\"" + "|grep -i [r]efused"
     #command = "LANG=en_US.UTF-8; export LANG; LC_ALL=en_US.UTF-8;export LC_ALL;cat /var/log/secure | " + "grep -E \"" + MON + "[ ]+15[ ]+21:[0-5][0-9]:[0-5][0-9]\"" + "|grep -i [r]efused"
+#    command = "last|grep -E 'May[ ]11[ ]09|May[ ][ ]11[ ]09'  last|grep still"
     print command
     main()  
